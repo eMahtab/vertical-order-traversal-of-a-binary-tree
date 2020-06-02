@@ -12,6 +12,8 @@ Running a vertical line from X = -infinity to X = +infinity, whenever the vertic
 Return an list of non-empty reports in order of X coordinate.  Every report will have a list of values of nodes.
 
 
+![Binary Tree Vertical Order Traversal](vertical-order-traversal-ii.JPG?raw=true "Binary Tree Vertical Order Traversal")
+
 ## Implementation :
 
 
