@@ -15,7 +15,80 @@ Return an list of non-empty reports in order of X coordinate.  Every report will
 ![Binary Tree Vertical Order Traversal](vertical-order-traversal-ii.JPG?raw=true "Binary Tree Vertical Order Traversal")
 
 ## Implementation :
-
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    class Node {
+        TreeNode treeNode;
+        int horizontalDistance;
+        int verticalDistance;
+        public Node(TreeNode treeNode, int horizontalDistance, int verticalDistance) {
+            this.treeNode = treeNode;
+            this.horizontalDistance = horizontalDistance;
+            this.verticalDistance = verticalDistance;
+        }
+    }
+    
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null) return res;
+        Map<Integer, List<Node>> map = new HashMap<>();
+        Queue<Node> q = new LinkedList<>();
+        q.offer(new Node(root, 0, 0));
+        int minHorizontalDistance = Integer.MAX_VALUE;
+        int maxHorizontalDistance = Integer.MIN_VALUE;
+        
+        while (!q.isEmpty()) {
+            Node node = q.poll();
+            map.putIfAbsent(node.horizontalDistance, new ArrayList<>());
+            minHorizontalDistance = Math.min(minHorizontalDistance, node.horizontalDistance);
+            maxHorizontalDistance = Math.max(maxHorizontalDistance, node.horizontalDistance);
+            
+            map.get(node.horizontalDistance).add(node);
+            if (node.treeNode.left != null) 
+                q.offer(new Node(node.treeNode.left, node.horizontalDistance - 1, node.verticalDistance - 1));
+            
+            if (node.treeNode.right != null) 
+                q.offer(new Node(node.treeNode.right, node.horizontalDistance + 1, node.verticalDistance - 1));
+            
+        }
+        
+        int index = 0;
+        for (int i = minHorizontalDistance; i <= maxHorizontalDistance; i++) {
+            res.add(new ArrayList<>());
+            
+            Collections.sort(map.get(i), (n1, n2) -> {
+                if (n1.verticalDistance == n2.verticalDistance) {
+                    return n1.treeNode.val - n2.treeNode.val;
+                } else {
+                    return n2.verticalDistance - n1.verticalDistance;
+                }
+            });
+           
+            for (Node node : map.get(i)) {
+                res.get(index).add(node.treeNode.val);
+            }
+            index++;
+        }
+        
+        return res;
+    }
+}
+```
 
 
 # References :
